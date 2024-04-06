@@ -7,6 +7,27 @@
 #define RAISE MO(_RAISE)
 #define LOWER MO(_LOWER)
 
+enum custom_keycodes {
+    DOUBLE_QUOSP = SAFE_RANGE,
+    SINGLE_QUOSP,
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case DOUBLE_QUOSP:
+            if (record->event.pressed) {
+                SEND_STRING("\" ");
+            }
+            break;
+        case SINGLE_QUOSP:
+            if (record->event.pressed) {
+                SEND_STRING("' ");
+            }
+            break;
+    }
+    return true;
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_QWERTY] = LAYOUT_5x6(
         KC_ESC , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                         KC_6  , KC_7  , KC_8  , KC_9  , KC_0  ,KC_BSPC,
@@ -22,8 +43,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_LOWER] = LAYOUT_5x6(
         KC_TILD,KC_EXLM, KC_AT ,KC_HASH,KC_DLR ,KC_PERC,                        KC_CIRC,KC_AMPR,KC_PSLS,KC_PAST,KC_PMNS,KC_DEL,
         _______,_______,_______,_______,_______,KC_LCBR,                        KC_RCBR, KC_P7 , KC_P8 , KC_P9 ,KC_PPLS,KC_PLUS,
-        _______,KC_HOME,KC_PGUP,KC_PGDN,KC_QUOT ,KC_LBRC,                       KC_RBRC , KC_P4 , KC_P5 , KC_P6 ,KC_PENT,KC_PIPE,
-        _______,_______,_______,_______,KC_DQUO,KC_LPRN,                        KC_RPRN, KC_P1 , KC_P2 , KC_P3 ,KC_PENT ,KC_UNDS,
+        _______,KC_HOME,KC_PGUP,KC_PGDN,SINGLE_QUOSP ,KC_LBRC,                       KC_RBRC , KC_P4 , KC_P5 , KC_P6 ,KC_PENT,KC_PIPE,
+        _______,_______,_______,_______,DOUBLE_QUOSP,KC_LPRN,                        KC_RPRN, KC_P1 , KC_P2 , KC_P3 ,KC_PENT ,KC_UNDS,
                                                 _______,KC_PSCR,            KC_P0, KC_PDOT,
                                                 _______,_______,            _______,_______,
                                                 _______,_______,            _______,_______,
